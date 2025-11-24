@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripleAck - Inicio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fdbc2a 0%, #ffd96a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .inicio-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(74, 31, 15, 0.3);
+            overflow: hidden;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .header-inicio {
+            background: #4a1f0f;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .logo-container {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid #fdbc2a;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .logo-placeholder {
+            font-size: 3.5em;
+        }
+
+        .header-inicio h1 {
+            color: #fdbc2a;
+            font-size: 2.5em;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .header-inicio p {
+            color: #fdbc2a;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .menu-body {
+            padding: 40px 30px;
+        }
+
+        .welcome-text {
+            text-align: center;
+            color: #4a1f0f;
+            margin-bottom: 30px;
+        }
+
+        .welcome-text h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .welcome-text p {
+            color: #666;
+        }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn-menu {
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-invitado {
+            background: #fdbc2a;
+            color: #4a1f0f;
+            box-shadow: 0 5px 15px rgba(253, 188, 42, 0.3);
+        }
+
+        .btn-invitado:hover {
+            background: #4a1f0f;
+            color: #fdbc2a;
+            transform: translateY(-2px);
+        }
+
+        .btn-personal {
+            background: #4a1f0f;
+            color: #fdbc2a;
+            box-shadow: 0 5px 15px rgba(74, 31, 15, 0.3);
+        }
+
+        .btn-personal:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        /* Modal Login */
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .login-box h2 {
+            color: #4a1f0f;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #4a1f0f;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 3px solid #fdbc2a;
+            border-radius: 10px;
+            font-size: 1em;
+            background: #fef9ed;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4a1f0f;
+            background: white;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: #fdbc2a;
+            color: #4a1f0f;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .btn-submit:hover {
+            background: #4a1f0f;
+            color: #fdbc2a;
+        }
+
+        .btn-cancel {
+            width: 100%;
+            padding: 12px;
+            background: #ddd;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .error-msg {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            text-align: center;
+        }
+
+        @media (max-width: 500px) {
+            .header-inicio h1 {
+                font-size: 2em;
+            }
+
+            .logo-container {
+                width: 100px;
+                height: 100px;
+            }
+
+            .logo-placeholder {
+                font-size: 3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="inicio-container">
+        <div class="header-inicio">
+            <div class="logo-container">
+                <div class="logo-circle">
+  <img src="img/logoTCK.png" alt="Logo" 
+       style="width:120px;height:120px;border-radius:50%;object-fit:cover;">
+</div>
+
+            </div>
+            <h1>TripleAck</h1>
+            <p>Productos Saludables</p>
+        </div>
+
+        <div class="menu-body">
+            <div class="welcome-text">
+                <h2>¡Bienvenido!</h2>
+                <p>Selecciona una opción para continuar</p>
+            </div>
+
+            <div class="menu-buttons">
+                <button class="btn-menu btn-invitado" onclick="window.location.href='invitado.html'">
+                    <span>🛍️</span>
+                    <span>Ver Tienda (Invitado)</span>
+                </button>
+                <button class="btn-menu btn-personal" onclick="mostrarLogin()">
+                    <span>🔐</span>
+                    <span>Panel Personal</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Login -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-box">
+            <h2>🔐 Acceso Personal</h2>
+            <form onsubmit="verificarPassword(event)">
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="password" placeholder="Ingresa tu contraseña" autocomplete="off">
+                </div>
+                <button type="submit" class="btn-submit">Ingresar</button>
+                <button type="button" class="btn-cancel" onclick="cerrarLogin()">Cancelar</button>
+                <div class="error-msg" id="errorMsg">
+                    ❌ Contraseña incorrecta
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const PASSWORD_CORRECTA = "tripleack123";
+
+        function mostrarLogin() {
+            document.getElementById('loginModal').style.display = 'flex';
+            document.getElementById('password').focus();
+        }
+
+        function cerrarLogin() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('password').value = '';
+            document.getElementById('errorMsg').style.display = 'none';
+        }
+
+        function verificarPassword(event) {
+            event.preventDefault();
+            const pass = document.getElementById('password').value;
+            
+            if (pass === PASSWORD_CORRECTA) {
+                sessionStorage.setItem('authenticated', 'true');
+                window.location.href = 'personal.html';
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+                document.getElementById('password').value = '';
+            }
+        }
+
+        // Enter para login
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('password').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    verificarPassword(e);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

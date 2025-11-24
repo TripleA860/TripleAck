@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripleAck - Tienda</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: #4a1f0f;
+            color: white;
+            padding: 20px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-small {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            border: 3px solid #fdbc2a;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            color: #fdbc2a;
+        }
+
+        .header p {
+            color: #fdbc2a;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+
+        .btn-volver {
+            background: #fdbc2a;
+            color: #4a1f0f;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-volver:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            color: #4a1f0f;
+            font-size: 2em;
+            margin-bottom: 40px;
+        }
+
+        /* Grid de productos */
+        .productos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .producto-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 3px solid #fdbc2a;
+            transition: all 0.3s;
+        }
+
+        .producto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(74, 31, 15, 0.2);
+        }
+
+        .producto-img {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #fdbc2a 0%, #ffd96a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5em;
+        }
+
+        .producto-info {
+            padding: 25px;
+        }
+
+        .producto-info h3 {
+            color: #4a1f0f;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .producto-info p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .producto-detalles {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #fdbc2a;
+        }
+
+        .precio {
+            font-size: 2em;
+            font-weight: bold;
+            color: #4a1f0f;
+        }
+
+        .stock {
+            background: #4a1f0f;
+            color: #fdbc2a;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .stock.bajo {
+            background: #c62828;
+            color: white;
+        }
+
+        .stock.agotado {
+            background: #999;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #999;
+        }
+
+        .empty-state p {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .header-left {
+                flex-direction: column;
+            }
+
+            .productos-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="logo-circle">
+  <img src="img/logoTCK.png" alt="Logo" 
+       style="width:120px;height:120px;border-radius:50%;object-fit:cover;">
+</div>
+
+            <div>
+                <h1>TripleAck</h1>
+                <p>Productos Saludables</p>
+            </div>
+        </div>
+        <button class="btn-volver" onclick="window.location.href='index.html'">← Volver al Inicio</button>
+    </div>
+
+    <!-- Container -->
+    <div class="container">
+        <h2 class="section-title">🛍️ Nuestros Productos</h2>
+        <div class="productos-grid" id="productosGrid"></div>
+    </div>
+
+    <script>
+        // Cargar productos desde localStorage o usar datos por defecto
+        function cargarProductos() {
+            const productosGuardados = localStorage.getItem('productos');
+            if (productosGuardados) {
+                return JSON.parse(productosGuardados);
+            }
+            
+            // Productos por defecto
+            return [
+                {
+                    id: 1,
+                    nombre: "Brownie Saludable",
+                    descripcion: "Brownie de chocolate con ingredientes naturales, sin azúcar refinada",
+                    icono: "🍫",
+                    precio: 120,
+                    stock: 15
+                },
+                {
+                    id: 2,
+                    nombre: "Galletas de Avena",
+                    descripcion: "Galletas integrales con avena y miel orgánica",
+                    icono: "🍪",
+                    precio: 90,
+                    stock: 8
+                },
+                {
+                    id: 3,
+                    nombre: "Muffins de Arándanos",
+                    descripcion: "Muffins con arándanos frescos y sin azúcar refinada",
+                    icono: "🧁",
+                    precio: 100,
+                    stock: 12
+                },
+                {
+                    id: 4,
+                    nombre: "Bandeja de Coco",
+                    descripcion: "Deliciosa bandeja con coco rallado natural y endulzante saludable",
+                    icono: "🥥",
+                    precio: 150,
+                    stock: 10
+                },
+                {
+                    id: 5,
+                    nombre: "Granola con Pasas",
+                    descripcion: "Granola casera con avena, frutos secos y pasas orgánicas",
+                    icono: "🌾",
+                    precio: 110,
+                    stock: 20
+                },
+                {
+                    id: 6,
+                    nombre: "Cookies con Chispas",
+                    descripcion: "Galletas con chispas de chocolate semi-amargo, sin azúcar refinada",
+                    icono: "🍪",
+                    precio: 95,
+                    stock: 0
+                }
+            ];
+        }
+
+        function renderProductos() {
+            const productos = cargarProductos();
+            const grid = document.getElementById('productosGrid');
+
+            if (productos.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <p>No hay productos disponibles</p>
+                        <p style="font-size: 3em;">🐼</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = productos.map(p => {
+                let stockClass = '';
+                let stockText = `Stock: ${p.stock}`;
+                
+                if (p.stock === 0) {
+                    stockClass = 'agotado';
+                    stockText = 'AGOTADO';
+                } else if (p.stock <= 5) {
+                    stockClass = 'bajo';
+                    stockText = `¡Quedan ${p.stock}!`;
+                }
+
+                return `
+                    <div class="producto-card">
+                        <div class="producto-img">${p.icono}</div>
+                        <div class="producto-info">
+                            <h3>${p.nombre}</h3>
+                            <p>${p.descripcion}</p>
+                            <div class="producto-detalles">
+                                <div class="precio">$${p.precio}</div>
+                                <div class="stock ${stockClass}">${stockText}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Inicializar
+        window.addEventListener('DOMContentLoaded', () => {
+            renderProductos();
+        });
+    </script>
+</body>
+</html>
